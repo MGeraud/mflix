@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MongoClientLesson extends AbstractLesson {
 
   private MongoCollection<Document> collection;
 
-  private String uri = "<YOUR SRV STRING from the application.properties file>";
+  private String uri = "URI database" ;
 
   private Document document;
 
@@ -121,7 +122,7 @@ public class MongoClientLesson extends AbstractLesson {
     you need to go over the contents more than once.
      */
 
-    Assert.assertTrue(dbnames.contains("mflix"));
+    Assert.assertTrue(dbnames.contains("sample_mflix"));
 
     /*
     Then we have our MongoDatabase object. We will use this object to
@@ -129,7 +130,7 @@ public class MongoClientLesson extends AbstractLesson {
     database level read preferences, read concerns and write concerns.
      */
 
-    database = mongoClient.getDatabase("mflix");
+    database = mongoClient.getDatabase("sample_mflix");
 
     ReadPreference readPreference = database.getReadPreference();
 
@@ -154,7 +155,7 @@ public class MongoClientLesson extends AbstractLesson {
      */
 
     mongoClient = MongoClients.create(uri);
-    database = mongoClient.getDatabase("mflix");
+    database = mongoClient.getDatabase("sample_mflix");
     collection = database.getCollection("movies");
 
     /*
@@ -179,8 +180,8 @@ public class MongoClientLesson extends AbstractLesson {
   @Test
   public void DocumentInstance() {
     mongoClient = MongoClients.create(uri);
-    database = mongoClient.getDatabase("test");
-    collection = database.getCollection("users");
+    database = mongoClient.getDatabase("test"); //Ajout de la database si elle n'existe pas
+    collection = database.getCollection("users"); //Ajout de la collection si elle n'existe pas
 
     /*
     The basic data structures in MongoDB are documents. The document
