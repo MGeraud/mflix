@@ -123,7 +123,7 @@ public class MovieDao extends AbstractMFlixDao {
 
         Bson queryFilter = in("countries", country);
         Bson projection = new Document("title", 1);
-        //TODO> Ticket: Projection - implement the query and projection required by the unit test
+
         List<Document> movies = new ArrayList<>();
         moviesCollection
                 .find(queryFilter).projection(projection)
@@ -167,10 +167,9 @@ public class MovieDao extends AbstractMFlixDao {
      * @return List of documents sorted by sortKey that match the cast selector.
      */
     public List<Document> getMoviesByCast(String sortKey, int limit, int skip, String... cast) {
-        Bson castFilter = null;
-        Bson sort = null;
-        //TODO> Ticket: Subfield Text Search - implement the expected cast
-        // filter and sort
+        Bson castFilter = Filters.in("cast" , cast);
+        Bson sort = Sorts.descending(sortKey);
+
         List<Document> movies = new ArrayList<>();
         moviesCollection
                 .find(castFilter)
@@ -197,9 +196,13 @@ public class MovieDao extends AbstractMFlixDao {
         // sort key
         Bson sort = Sorts.descending(sortKey);
         List<Document> movies = new ArrayList<>();
-        // TODO > Ticket: Paging - implement the necessary cursor methods to support simple
-        // pagination like skip and limit in the code below
-        moviesCollection.find(castFilter).sort(sort).iterator()
+
+        moviesCollection
+                .find(castFilter)
+                .sort(sort)
+                .limit(limit)
+                .skip(skip)
+                .iterator()
         .forEachRemaining(movies::add);
         return movies;
     }
